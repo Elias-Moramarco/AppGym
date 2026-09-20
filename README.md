@@ -7,5 +7,3 @@ Aplicación multiplataforma (Web, iOS y Android) para la gestión del bienestar 
 * **Frontend:** React Native, Expo, React Native Web.
 * **Backend & Auth:** Supabase.
 * **UI/UX:** Flexbox responsivo y API Animated nativa.
-
-## 📦 Instalación local
