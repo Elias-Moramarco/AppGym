@@ -109,7 +109,7 @@ export default function LandingScreen() {
       <Animated.ScrollView 
         style={styles.container} 
         contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
+        showsVerticalScrollIndicator={true}
         scrollEventThrottle={16}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],
@@ -119,7 +119,13 @@ export default function LandingScreen() {
         
         {/* NAVBAR */}
         <View style={[styles.navbar, isDesktop && styles.navbarDesktop]}>
-          <Text style={styles.brand}>Fitness OS</Text>
+        <Text 
+          onPress={() => router.push('/')} 
+          style={styles.brand}
+          accessibilityRole="link"
+        >
+          Fitness OS
+        </Text>
           <View style={styles.navActions}>
             <Pressable style={styles.loginButton} onPress={() => router.push('/login')}>
               <Text style={styles.loginButtonText}>Ingresar</Text>

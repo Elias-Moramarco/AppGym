@@ -2,60 +2,55 @@ import { useState } from 'react';
 import { Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
 export default function PasosScreen() {
-  const [pasos, setPasos] = useState(8432);
-  const metaPasos = 10000;
-  const progreso = (pasos / metaPasos) * 100;
+  // Estado temporal para simular los pasos antes de conectarlo a la base de datos
+  const [pasos, setPasos] = useState(3240);
+  const metaDiaria = 10000;
+  const progreso = Math.min((pasos / metaDiaria) * 100, 100);
+
+  const simularCaminata = () => {
+    setPasos(prev => prev + 500);
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
         
-        {/* HEADER: Mayúsculas, limpio, fuerte */}
         <View style={styles.header}>
-          <Text style={styles.subtitle}>RESUMEN DE HOY</Text>
-          <Text style={styles.headline}>MOVIMIENTO</Text>
+          <Text style={styles.title}>Movimiento Diario</Text>
+          <Text style={styles.subtitle}>Tu objetivo: {metaDiaria.toLocaleString()} pasos</Text>
         </View>
 
-        {/* MÉTRICA PRINCIPAL: Gigante, sin cajas, directo al fondo */}
-        <View style={styles.mainMetric}>
-          <Text style={styles.massiveNumber}>{pasos}</Text>
-          <Text style={styles.metricLabel}>PASOS TOTALES</Text>
-          
-          {/* BARRA DE PROGRESO: Fina y agresiva */}
-          <View style={styles.progressContainer}>
-            <View style={styles.progressTrack}>
-              <View style={[styles.progressFill, { width: `${progreso}%` }]} />
-            </View>
-            <Text style={styles.progressText}>{metaPasos} META</Text>
+        {/* Indicador principal */}
+        <View 
+          style={styles.circleContainer}
+          accessibilityRole="progressbar"
+          accessibilityValue={{ min: 0, max: metaDiaria, now: pasos }}
+          accessibilityLabel={`${pasos} pasos de ${metaDiaria}`}
+        >
+          <View style={styles.circle}>
+            <Text style={styles.stepCount}>{pasos.toLocaleString()}</Text>
+            <Text style={styles.stepLabel}>PASOS</Text>
           </View>
         </View>
 
-        {/* MÉTRICAS SECUNDARIAS: Separadores finos en lugar de tarjetas */}
-        <View style={styles.statsRow}>
-          <View style={styles.statBlock}>
-            <Text style={styles.statNumber}>78.5<Text style={styles.statUnit}> KG</Text></Text>
-            <Text style={styles.statLabel}>PESO ACTUAL</Text>
-          </View>
-          
-          <View style={styles.divider} />
-          
-          <View style={styles.statBlock}>
-            <Text style={styles.statNumber}>420<Text style={styles.statUnit}> KCAL</Text></Text>
-            <Text style={styles.statLabel}>QUEMADAS</Text>
+        {/* Barra de progreso horizontal */}
+        <View style={styles.progressContainer}>
+          <Text style={styles.progressText}>{Math.round(progreso)}% completado</Text>
+          <View style={styles.track}>
+            <View style={[styles.fill, { width: `${progreso}%` }]} />
           </View>
         </View>
 
-        {/* BOTÓN NTC: Bordes más cuadrados, alto contraste (blanco sobre negro) */}
-        <View style={styles.footer}>
-          <Pressable 
-            style={({ pressed }) => [
-              styles.primaryButton,
-              pressed && styles.primaryButtonPressed
-            ]}
-          >
-            <Text style={styles.primaryButtonText}>REGISTRAR ACTIVIDAD</Text>
-          </Pressable>
-        </View>
+        {/* Botón de carga manual (Área táctil mínima de 48px) */}
+        <Pressable 
+          style={styles.addButton} 
+          onPress={simularCaminata}
+          accessibilityRole="button"
+          accessibilityLabel="Sumar 500 pasos manualmente"
+          accessibilityHint="Añade 500 pasos a tu progreso actual"
+        >
+          <Text style={styles.addButtonText}>+ SIMULAR 500 PASOS</Text>
+        </Pressable>
 
       </View>
     </SafeAreaView>
@@ -63,124 +58,49 @@ export default function PasosScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000000', // Negro puro
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 40,
-  },
-  header: {
-    marginBottom: 48,
-  },
-  subtitle: {
-    color: '#888888',
-    fontSize: 13,
-    fontWeight: '700',
-    letterSpacing: 2,
-    marginBottom: 4,
-  },
-  headline: {
-    color: '#FFFFFF',
-    fontSize: 36,
-    fontWeight: '900',
-    letterSpacing: 1,
-  },
-  mainMetric: {
-    marginBottom: 48,
-  },
-  massiveNumber: {
-    color: '#FFFFFF',
-    fontSize: 84,
-    fontWeight: '900',
-    fontVariant: ['tabular-nums'],
-    letterSpacing: -2,
-    lineHeight: 90,
-  },
-  metricLabel: {
-    color: '#D4FE00', // Nike Volt Yellow
-    fontSize: 16,
-    fontWeight: '800',
-    letterSpacing: 1,
-    marginTop: -4,
-    marginBottom: 24,
-  },
-  progressContainer: {
-    flexDirection: 'row',
+  safeArea: { flex: 1, backgroundColor: '#F4F9F6' },
+  container: { flex: 1, padding: 24, justifyContent: 'space-between', alignItems: 'center', paddingVertical: 40 },
+  
+  header: { alignItems: 'center', width: '100%', marginBottom: 20 },
+  title: { fontSize: 28, fontWeight: '900', color: '#1A3B2E', letterSpacing: -0.5 },
+  subtitle: { fontSize: 16, color: '#3A6351', marginTop: 4 },
+  
+  circleContainer: { 
+    width: 240, 
+    height: 240, 
+    borderRadius: 120, 
+    backgroundColor: '#E2F0E9', 
+    justifyContent: 'center', 
     alignItems: 'center',
-    gap: 16,
+    marginVertical: 40
   },
-  progressTrack: {
-    flex: 1,
-    height: 4,
-    backgroundColor: '#333333',
-    borderRadius: 2,
-  },
-  progressFill: {
-    height: '100%',
-    backgroundColor: '#D4FE00', 
-    borderRadius: 2,
-  },
-  progressText: {
-    color: '#888888',
-    fontSize: 12,
-    fontWeight: '700',
-    letterSpacing: 1,
-  },
-  statsRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: '#222222',
-    paddingVertical: 24,
-  },
-  statBlock: {
-    flex: 1,
-  },
-  divider: {
-    width: 1,
-    height: 40,
-    backgroundColor: '#222222',
-    marginHorizontal: 16,
-  },
-  statNumber: {
-    color: '#FFFFFF',
-    fontSize: 28,
-    fontWeight: '800',
-  },
-  statUnit: {
-    fontSize: 16,
-    color: '#888888',
-  },
-  statLabel: {
-    color: '#888888',
-    fontSize: 12,
-    fontWeight: '700',
-    letterSpacing: 1,
-    marginTop: 4,
-  },
-  footer: {
-    marginTop: 'auto',
-    paddingBottom: 32,
-  },
-  primaryButton: {
-    backgroundColor: '#FFFFFF', // Botón blanco para máximo contraste
-    paddingVertical: 20,
-    borderRadius: 8, // Bordes menos redondeados, más agresivos
-    alignItems: 'center',
+  circle: {
+    width: 210,
+    height: 210,
+    borderRadius: 105,
+    backgroundColor: '#FFFFFF',
     justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 8,
+    borderColor: '#C2EABD'
   },
-  primaryButtonPressed: {
-    opacity: 0.7,
+  stepCount: { fontSize: 48, fontWeight: '900', color: '#1A3B2E', letterSpacing: -2 },
+  stepLabel: { fontSize: 14, fontWeight: '800', color: '#88A096', letterSpacing: 2, marginTop: -4 },
+  
+  progressContainer: { width: '100%', maxWidth: 400, marginBottom: 40 },
+  progressText: { textAlign: 'right', marginBottom: 8, fontSize: 14, fontWeight: '700', color: '#3A6351' },
+  track: { height: 16, backgroundColor: '#E2F0E9', borderRadius: 8, overflow: 'hidden' },
+  fill: { height: '100%', backgroundColor: '#1A3B2E', borderRadius: 8 },
+  
+  addButton: { 
+    backgroundColor: '#1A3B2E', 
+    paddingVertical: 18, 
+    borderRadius: 100, 
+    width: '100%', 
+    maxWidth: 320, 
+    alignItems: 'center',
+    minHeight: 48,
+    boxShadow: '0px 4px 12px rgba(26, 59, 46, 0.2)'
   },
-  primaryButtonText: {
-    color: '#000000',
-    fontSize: 16,
-    fontWeight: '900',
-    letterSpacing: 1,
-  },
+  addButtonText: { color: '#FFFFFF', fontSize: 16, fontWeight: '800', letterSpacing: 1 }
 });

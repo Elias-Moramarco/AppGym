@@ -1,11 +1,12 @@
-import 'react-native-url-polyfill/auto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient } from '@supabase/supabase-js';
 import { Platform } from 'react-native';
+import 'react-native-url-polyfill/auto';
 import { Database } from './database.types';
 
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL as string;
-const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY as string;
+const supabasePublishableKey =
+  process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY as string;
 
 // Escudo para evitar que la web explote al no encontrar 'window'
 const supabaseStorage = {
@@ -23,11 +24,15 @@ const supabaseStorage = {
   },
 };
 
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    storage: supabaseStorage, // Usamos el adaptador seguro
-    autoRefreshToken: true,
-    persistSession: true,
-    detectSessionInUrl: false,
-  },
-});
+export const supabase = createClient<Database>(
+  supabaseUrl,
+  supabasePublishableKey,
+  {
+    auth: {
+      storage: supabaseStorage,
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: false,
+    },
+  }
+);

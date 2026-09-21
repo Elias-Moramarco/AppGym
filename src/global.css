@@ -7,3 +7,29 @@
   --font-rounded: 'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif;
   --font-serif: Georgia, 'Times New Roman', serif;
 }
+
+/* --- ESTILOS DE LA BARRA DE DESPLAZAMIENTO (SCROLLBAR) --- */
+
+/* Ancho de la barra */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* Fondo de la barra (Track) */
+::-webkit-scrollbar-track {
+  background: #F4F9F6; 
+  border-radius: 10px;
+}
+
+/* La barra que se mueve (Thumb) */
+::-webkit-scrollbar-thumb {
+  background: #C2EABD; /* El verde claro de tus botones */
+  border-radius: 10px;
+  border: 2px solid #F4F9F6; /* Le da un efecto de margen interno */
+}
+
+/* La barra cuando le pasas el mouse por encima */
+::-webkit-scrollbar-thumb:hover {
+  background: #88A096; /* Un verde un poco más oscuro */
+}
